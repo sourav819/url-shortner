@@ -20,7 +20,7 @@ Follow these steps:
 
 ### Boilerplate Structure
 
-├─── <font color="#3465A4"><b>controllers</b></font>
+<pre>├─── <font color="#3465A4"><b>controllers</b></font>
 ├─── <font color="#3465A4"><b>models</b></font>
 ├─── <font color="#3465A4"><b>objects</b></font> 
 ├─── <font color="#3465A4"><b>pkg</b></font> 
@@ -29,7 +29,8 @@ Follow these steps:
 │   ├───helper
 │   └───logger
 ├─── <font color="#3465A4"><b>routers</b></font> 
-└─── <font color="#3465A4"><b>utils</b></font> 
+└─── <font color="#3465A4"><b>utils</b></font>
+</pre> 
 
 # Future TODO list
 
