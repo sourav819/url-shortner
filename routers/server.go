@@ -3,12 +3,8 @@ package routers
 import (
 	"fmt"
 	"net/http"
-	"time"
 	"url-shortner/pkg/config"
-)
-
-var (
-	serverState ServerState
+	"url-shortner/pkg/logger"
 )
 
 func runServer(app config.AppConfig) {
@@ -18,13 +14,10 @@ func runServer(app config.AppConfig) {
 		Handler: app.Router,
 	}
 
-	graceful := Graceful{
-		Server:          server,
-		ShutdownTimeout: time.Duration(5 * time.Second),
-		State:           &serverState,
-	}
 	displayService()
-	graceful.ListenAndServe()
+
+	logger.Infof("Serving and listening on Port %s ", server.Addr)
+	server.ListenAndServe()
 }
 
 // You can generate ASCI art here
