@@ -14,6 +14,7 @@ func main() {
 	if err != nil {
 		logger.Fatal("unable to load config ", err)
 	}
+	//making the database connection
 	db, err := database.GetDB(cfg)
 	if err != nil {
 		logger.Fatal("unable to load config ", err)
