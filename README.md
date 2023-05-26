@@ -33,6 +33,6 @@ Follow these steps:
 </pre>
 # Future TODO list
 
-- [] Build frontend with React.js
-- [] Feature: Count of clicks on short url
-- [] feature: Caching with Redis
+- [ ] Build Frontend with React.js
+- [ ] Feature: Count of clicks on short url
+- [ ] feature: Caching with Redis
