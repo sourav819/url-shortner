@@ -20,7 +20,7 @@ Follow these steps:
 
 ### Boilerplate Structure
 
-<pre>├─── <font color="#3465A4"><b>controllers</b></font>
+<pre>├── <font color="#3465A4"><b>controllers</b></font>
 ├─── <font color="#3465A4"><b>models</b></font>
 ├─── <font color="#3465A4"><b>objects</b></font> 
 ├─── <font color="#3465A4"><b>pkg</b></font> 
@@ -30,8 +30,7 @@ Follow these steps:
 │   └───logger
 ├─── <font color="#3465A4"><b>routers</b></font> 
 └─── <font color="#3465A4"><b>utils</b></font>
-</pre> 
-
+</pre>
 # Future TODO list
 
 - [] Build frontend with React.js
