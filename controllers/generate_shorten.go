@@ -33,7 +33,7 @@ func (b *BaseController) GenerateShortUrl(c *gin.Context) {
 	_, urlErr := url.ParseRequestURI(request.OriginalUrl)
 	if urlErr != nil {
 		b.Log.Error("invalid url ", urlErr)
-		c.AbortWithStatusJSON(http.StatusBadRequest, errResponse.GenerateError(http.StatusBadRequest, "invalid request"))
+		c.AbortWithStatusJSON(http.StatusBadRequest, errResponse.GenerateError(http.StatusBadRequest, "invalid url provided"))
 		return
 	}
 	//check if the url is already present in db
