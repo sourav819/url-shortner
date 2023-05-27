@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"net/url"
+	"url-shortner/constants"
 	"url-shortner/models"
 	"url-shortner/objects"
 	"url-shortner/utils"
@@ -14,26 +15,25 @@ import (
 func (b *BaseController) GenerateShortUrl(c *gin.Context) {
 
 	var (
-		request    objects.GenerateURL
-		err        error
-		urlRepo    = models.InitUrlDetailsRepo(b.DB)
-		urlDetails = models.UrlInfo{}
-		baseCode   string
+		request     objects.GenerateURL
+		err         error
+		urlRepo     = models.InitUrlDetailsRepo(b.DB)
+		urlDetails  = models.UrlInfo{}
+		baseCode    string
+		errResponse = constants.ErrorEntity{}
 	)
 	err = c.ShouldBindJSON(&request)
 	if err != nil {
 		b.Log.Error("unable to bind json ", err)
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"message": "invalid request",
-		})
+
+		c.AbortWithStatusJSON(http.StatusBadRequest, errResponse.GenerateError(http.StatusBadRequest, "invalid request"))
 		return
+
 	}
 	_, urlErr := url.ParseRequestURI(request.OriginalUrl)
 	if urlErr != nil {
 		b.Log.Error("invalid url ", urlErr)
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"message": "invalid url provided",
-		})
+		c.AbortWithStatusJSON(http.StatusBadRequest, errResponse.GenerateError(http.StatusBadRequest, "invalid url provided"))
 		return
 	}
 	//check if the url is already present in db
@@ -41,9 +41,7 @@ func (b *BaseController) GenerateShortUrl(c *gin.Context) {
 	existUrl, err := urlRepo.GetUrlById(request.OriginalUrl)
 	if err != nil && err != gorm.ErrRecordNotFound {
 		b.Log.Error("unable to fetch record for a url ", err)
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-			"message": "something went wrong",
-		})
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errResponse.GenerateError(http.StatusInternalServerError, "something went wrong"))
 		return
 	}
 
@@ -61,9 +59,7 @@ func (b *BaseController) GenerateShortUrl(c *gin.Context) {
 	if err != nil {
 		b.Log.Error("unable to create record for url ", err)
 		tx.Rollback()
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-			"message": "something went wrong",
-		})
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errResponse.GenerateError(http.StatusInternalServerError, "something went wrong"))
 		return
 	}
 
@@ -74,9 +70,7 @@ func (b *BaseController) GenerateShortUrl(c *gin.Context) {
 		if err != nil {
 			b.Log.Error("unable to create code for short url ", err)
 			tx.Rollback()
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-				"message": "something went wrong",
-			})
+			c.AbortWithStatusJSON(http.StatusInternalServerError, errResponse.GenerateError(http.StatusInternalServerError, "something went wrong"))
 			return
 		}
 		baseCode = baseCode[:6]
@@ -86,17 +80,13 @@ func (b *BaseController) GenerateShortUrl(c *gin.Context) {
 	_, rowsEffected, err := urlRepo.GetById(baseCode)
 	if err != nil && err != gorm.ErrRecordNotFound {
 		b.Log.Error("unable to fetch code for the original url ", err)
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-			"message": "something went wrong",
-		})
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errResponse.GenerateError(http.StatusInternalServerError, "something went wrong"))
 		return
 	}
 	if rowsEffected != 0 {
 		b.Log.Error("custom code already exists  ")
 		tx.Rollback()
-		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
-			"message": "short url already exists",
-		})
+		c.AbortWithStatusJSON(http.StatusForbidden, errResponse.GenerateError(http.StatusForbidden, "action not allowed"))
 		return
 	}
 
@@ -107,9 +97,7 @@ func (b *BaseController) GenerateShortUrl(c *gin.Context) {
 	if err != nil {
 		b.Log.Error("unable to update record for url ", err)
 		tx.Rollback()
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-			"message": "something went wrong",
-		})
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errResponse.GenerateError(http.StatusInternalServerError, "something went wrong"))
 		return
 	}
 
@@ -117,9 +105,7 @@ func (b *BaseController) GenerateShortUrl(c *gin.Context) {
 	if err != nil {
 		b.Log.Error("unable to commit the code and url ", err)
 		tx.Rollback()
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-			"message": "something went wrong",
-		})
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errResponse.GenerateError(http.StatusInternalServerError, "something went wrong"))
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{

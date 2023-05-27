@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"sync"
+	"url-shortner/constants"
 	"url-shortner/models"
 
 	"github.com/gin-gonic/gin"
@@ -19,16 +20,15 @@ var cache = &sync.Map{}
 
 func (b *BaseController) GetOriginalUrl(c *gin.Context) {
 	var (
-		code    string
-		urlRepo = models.InitUrlDetailsRepo(b.DB)
+		code        string
+		urlRepo     = models.InitUrlDetailsRepo(b.DB)
+		errResponse = constants.ErrorEntity{}
 	)
 	code = c.Param("code")
 
 	if code == "" {
 		b.Log.Error("code is mandatory in short url ")
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"message": "invalid request",
-		})
+		c.AbortWithStatusJSON(http.StatusBadRequest, errResponse.GenerateError(http.StatusBadRequest, "invalid request"))
 		return
 	}
 	// code = utils.Base62Decode(code)
@@ -42,16 +42,12 @@ func (b *BaseController) GetOriginalUrl(c *gin.Context) {
 	codeInfo, rowsEffected, err := urlRepo.GetById(code)
 	if err != nil && err != gorm.ErrRecordNotFound {
 		b.Log.Error("unable to fetch code for the original url ", err)
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-			"message": "something went wrong",
-		})
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errResponse.GenerateError(http.StatusInternalServerError, "something went wrong"))
 		return
 	}
 	if rowsEffected == 0 {
 		b.Log.Error("code not found in records ")
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"message": "invalid request",
-		})
+		c.AbortWithStatusJSON(http.StatusBadRequest, errResponse.GenerateError(http.StatusBadRequest, "invalid request"))
 		return
 	}
 	cacheStore := *codeInfo.OriginalUrl
