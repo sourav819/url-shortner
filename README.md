@@ -1,6 +1,9 @@
 # URL- Shortner
 url shortner service
 
+### Documentation
+[Documentation Link](https://documenter.getpostman.com/view/21793551/2s93m7Wgpm)
+
 ### Configuration Management
 #### ENV Variables
 required env variables have been listed in `.env.example`
