@@ -1,5 +1,5 @@
-# URL- Shortner
-url shortner service
+# URL- Shortener
+url shortener service
 
 ### Documentation
 [Documentation Link](https://documenter.getpostman.com/view/21793551/2s93m7Wgpm)
