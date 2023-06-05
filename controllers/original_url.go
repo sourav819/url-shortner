@@ -24,7 +24,7 @@ func (b *BaseController) GetOriginalUrl(c *gin.Context) {
 		urlRepo     = models.InitUrlDetailsRepo(b.DB)
 		errResponse = constants.ErrorEntity{}
 	)
-	//fetch code
+	//fetch
 	code = c.Param("code")
 		
 	if code == "" {
