@@ -24,8 +24,9 @@ func (b *BaseController) GetOriginalUrl(c *gin.Context) {
 		urlRepo     = models.InitUrlDetailsRepo(b.DB)
 		errResponse = constants.ErrorEntity{}
 	)
+	//fetch code
 	code = c.Param("code")
-
+		
 	if code == "" {
 		b.Log.Error("code is mandatory in short url ")
 		c.AbortWithStatusJSON(http.StatusBadRequest, errResponse.GenerateError(http.StatusBadRequest, "invalid request"))
