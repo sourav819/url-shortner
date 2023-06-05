@@ -52,6 +52,9 @@ func (b *BaseController) GetOriginalUrl(c *gin.Context) {
 	}
 	cacheStore := *codeInfo.OriginalUrl
 	cache.Store(code, cacheStore)
-	c.Redirect(http.StatusMovedPermanently, *codeInfo.OriginalUrl)
+	OriginalUrl := *codeInfo.OriginalUrl
+	redirectUrl := OriginalUrl[0 : len(OriginalUrl)-6]
+	redirectUrl += "v1/" + OriginalUrl[len(OriginalUrl)-6:]
+	c.Redirect(http.StatusMovedPermanently, redirectUrl)
 
 }
