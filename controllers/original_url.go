@@ -31,7 +31,6 @@ func (b *BaseController) GetOriginalUrl(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, errResponse.GenerateError(http.StatusBadRequest, "invalid request"))
 		return
 	}
-	// code = utils.Base62Decode(code)
 	longURL, ok := cache.Load(code)
 	if ok {
 		b.Log.Info("using value stored in cache...")
