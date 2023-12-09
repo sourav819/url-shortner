@@ -23,5 +23,5 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          tags: user/app:latest
+          tags: souraav13/urlshortner:latest
           push: true
