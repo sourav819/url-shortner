@@ -7,3 +7,9 @@ func InitUrlDetailsRepo(DB *gorm.DB) IUrlDetails {
 		DB: DB,
 	}
 }
+
+func InitUserRepo(DB *gorm.DB) IUser {
+	return &userRepo{
+		DB: DB,
+	}
+}
