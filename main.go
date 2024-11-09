@@ -19,6 +19,7 @@ func main() {
 	if err != nil {
 		logger.Fatal("unable to load config ", err)
 	}
+
 	app := config.AppConfig{
 		DB:     db,
 		Config: cfg,
