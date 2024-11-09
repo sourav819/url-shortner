@@ -15,6 +15,7 @@ type Config struct {
 	Server     ServerConfiguration   `mapstructure:",squash"`
 	Database   DatabaseConfiguration `mapstructure:",squash"`
 	URLDetails URLDetails            `mapstructure:",squash"`
+	JWTConfig  JWTConfig             `mapstructure:",squash"`
 }
 
 type ServerConfiguration struct {
@@ -35,4 +36,9 @@ type DatabaseConfiguration struct {
 
 type URLDetails struct {
 	BaseUrl string `mapstructure:"BASE_URL"`
+}
+
+type JWTConfig struct {
+	JWTSecret               string `mapstructure:"JWT_SECRET"`
+	JWTTokenValidTimeInHour uint32 `mapstructure:"JWT_TOKEN_VALID_TIME_IN_HOUR"`
 }
