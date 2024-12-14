@@ -21,7 +21,7 @@ func Authentication(JWTSecret string, db *gorm.DB) gin.HandlerFunc {
 		tokenHeader := c.Request.Header.Get("Authorization")
 		if tokenHeader == "" {
 			logger.Error("token not present")
-			c.AbortWithStatusJSON(http.StatusUnauthorized, errMsg.GenerateError(http.StatusUnauthorized, ""))
+			c.AbortWithStatusJSON(http.StatusUnauthorized, errMsg.GenerateError(http.StatusUnauthorized, "auth header cannot be empty"))
 			return
 		}
 		AuthorizationKey := strings.Split(tokenHeader, " ")
